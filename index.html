@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Latihan Seni Budaya — Soft Quiz</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --lavender:   #EDE8F5;
+  --lavender2:  #DDD4EF;
+  --purple:     #9B84CC;
+  --purple-dk:  #7B63AA;
+  --sage:       #A8C5B5;
+  --sage-dk:    #7EA898;
+  --blush:      #F0C4C4;
+  --peach:      #F5D9C0;
+  --sky:        #BFD9EE;
+  --white:      #FAFAFE;
+  --text:       #3A3547;
+  --text-lt:    #7A7190;
+  --ok:         #6BBF8E;
+  --err:        #E08080;
+  --radius-lg:  24px;
+  --radius-xl:  32px;
+  --shadow:     0 8px 32px rgba(120,100,170,0.12);
+  --shadow-sm:  0 4px 16px rgba(120,100,170,0.08);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Lato', sans-serif;
+  background: var(--lavender);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ── soft blobs ── */
+body::before, body::after {
+  content: '';
+  position: fixed;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+  filter: blur(80px);
+  opacity: 0.5;
+}
+body::before {
+  width: 520px; height: 520px;
+  background: radial-gradient(circle, #D5CAF0 0%, transparent 70%);
+  top: -120px; left: -120px;
+}
+body::after {
+  width: 440px; height: 440px;
+  background: radial-gradient(circle, #C8E6D8 0%, transparent 70%);
+  bottom: -100px; right: -100px;
+}
+
+/* ═══════════ HERO ═══════════ */
+#hero {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  text-align: center;
+}
+
+.hero-card {
+  background: var(--white);
+  border-radius: var(--radius-xl);
+  padding: 56px 48px;
+  max-width: 520px;
+  width: 100%;
+  box-shadow: var(--shadow);
+  position: relative;
+  overflow: hidden;
+}
+
+/* decorative corner blobs inside hero card */
+.hero-card::before {
+  content: '';
+  position: absolute;
+  top: -40px; right: -40px;
+  width: 160px; height: 160px;
+  background: var(--lavender2);
+  border-radius: 50%;
+  opacity: 0.6;
+}
+.hero-card::after {
+  content: '';
+  position: absolute;
+  bottom: -50px; left: -30px;
+  width: 130px; height: 130px;
+  background: var(--peach);
+  border-radius: 50%;
+  opacity: 0.45;
+}
+
+.hero-emoji {
+  font-size: 64px;
+  margin-bottom: 20px;
+  display: block;
+  animation: bob 3s ease-in-out infinite;
+  position: relative;
+  z-index: 1;
+}
+
+@keyframes bob {
+  0%,100% { transform: translateY(0) rotate(-3deg); }
+  50%      { transform: translateY(-8px) rotate(3deg); }
+}
+
+.hero-card h1 {
+  font-family: 'Nunito', sans-serif;
+  font-size: 32px;
+  font-weight: 900;
+  line-height: 1.2;
+  color: var(--text);
+  margin-bottom: 10px;
+  position: relative;
+  z-index: 1;
+}
+
+.hero-card h1 span {
+  color: var(--purple);
+}
+
+.hero-card p {
+  font-size: 15px;
+  color: var(--text-lt);
+  line-height: 1.7;
+  margin-bottom: 32px;
+  position: relative;
+  z-index: 1;
+  font-weight: 300;
+}
+
+.hero-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: 36px;
+  position: relative;
+  z-index: 1;
+}
+
+.chip {
+  background: var(--lavender);
+  border-radius: 30px;
+  padding: 7px 18px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--purple-dk);
+  font-family: 'Nunito', sans-serif;
+}
+
+.chip.sage { background: #E0EFE9; color: var(--sage-dk); }
+.chip.blush { background: #FAE8E8; color: #C47070; }
+
+.btn-hero {
+  background: linear-gradient(135deg, var(--purple), var(--purple-dk));
+  color: white;
+  border: none;
+  padding: 15px 52px;
+  border-radius: 50px;
+  font-family: 'Nunito', sans-serif;
+  font-size: 16px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.28s;
+  position: relative;
+  z-index: 1;
+  letter-spacing: 0.3px;
+  box-shadow: 0 6px 20px rgba(123,99,170,0.35);
+}
+
+.btn-hero:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 30px rgba(123,99,170,0.45);
+}
+
+/* ═══════════ QUIZ ═══════════ */
+#quiz-section {
+  display: none;
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  padding-bottom: 60px;
+}
+
+/* top bar */
+.topbar {
+  background: rgba(250,250,254,0.85);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid rgba(155,132,204,0.15);
+  padding: 14px 24px;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.topbar-logo {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 900;
+  font-size: 16px;
+  color: var(--purple);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.prog-wrap { flex: 1; }
+
+.prog-meta {
+  font-size: 11px;
+  color: var(--text-lt);
+  font-weight: 700;
+  font-family: 'Nunito', sans-serif;
+  margin-bottom: 5px;
+}
+
+.prog-track {
+  height: 8px;
+  background: var(--lavender2);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.prog-bar {
+  height: 100%;
+  background: linear-gradient(90deg, var(--purple), var(--sage));
+  border-radius: 8px;
+  transition: width 0.5s cubic-bezier(.4,0,.2,1);
+}
+
+.score-pill {
+  background: linear-gradient(135deg, #EFE8FF, #E0EFEA);
+  border: 1.5px solid var(--lavender2);
+  border-radius: 30px;
+  padding: 5px 16px;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 800;
+  font-size: 13px;
+  color: var(--purple-dk);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* dot nav */
+.dots {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 18px 20px 0;
+  max-width: 820px;
+  margin: 0 auto;
+  justify-content: center;
+}
+
+.dot {
+  width: 26px; height: 26px;
+  border-radius: 50%;
+  background: white;
+  border: 2px solid rgba(155,132,204,0.2);
+  font-family: 'Nunito', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--text-lt);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+
+.dot:hover { border-color: var(--purple); color: var(--purple); transform: scale(1.1); }
+.dot.cur   { border-color: var(--purple); background: var(--lavender2); color: var(--purple); }
+.dot.ok    { background: var(--ok); border-color: var(--ok); color: white; }
+.dot.no    { background: var(--err); border-color: var(--err); color: white; }
+
+/* question card */
+.q-outer {
+  max-width: 760px;
+  margin: 28px auto 0;
+  padding: 0 20px;
+}
+
+.q-card {
+  background: var(--white);
+  border-radius: var(--radius-xl);
+  padding: 40px 36px;
+  box-shadow: var(--shadow);
+  position: relative;
+  overflow: hidden;
+}
+
+.q-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 5px;
+  background: linear-gradient(90deg, var(--purple), var(--sage), var(--blush));
+  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+}
+
+.q-num {
+  font-family: 'Nunito', sans-serif;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--purple);
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.q-num::after {
+  content: '';
+  flex: 1;
+  height: 1.5px;
+  background: linear-gradient(90deg, var(--lavender2), transparent);
+}
+
+.q-text {
+  font-family: 'Nunito', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.6;
+  color: var(--text);
+  margin-bottom: 28px;
+}
+
+/* options */
+.options { display: flex; flex-direction: column; gap: 10px; }
+
+.opt {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  background: var(--lavender);
+  border: 2px solid transparent;
+  border-radius: var(--radius-lg);
+  padding: 14px 18px;
+  cursor: pointer;
+  transition: all 0.22s;
+}
+
+.opt:hover:not(.locked) {
+  background: white;
+  border-color: var(--purple);
+  transform: translateX(5px);
+  box-shadow: var(--shadow-sm);
+}
+
+.opt-ltr {
+  min-width: 30px; height: 30px;
+  border-radius: 50%;
+  background: white;
+  border: 2px solid rgba(155,132,204,0.3);
+  font-family: 'Nunito', sans-serif;
+  font-weight: 800;
+  font-size: 12px;
+  color: var(--purple);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.2s;
+}
+
+.opt-txt {
+  font-size: 14.5px;
+  line-height: 1.55;
+  padding-top: 4px;
+  color: var(--text);
+  font-weight: 400;
+}
+
+.opt.correct {
+  background: #E6F7EE;
+  border-color: var(--ok);
+}
+.opt.correct .opt-ltr { background: var(--ok); border-color: var(--ok); color: white; }
+
+.opt.wrong {
+  background: #FCEAEA;
+  border-color: var(--err);
+}
+.opt.wrong .opt-ltr { background: var(--err); border-color: var(--err); color: white; }
+.opt.locked { cursor: default; }
+
+/* feedback bubble */
+.feedback {
+  display: none;
+  margin-top: 20px;
+  background: var(--lavender);
+  border-radius: var(--radius-lg);
+  padding: 18px 22px;
+  border-left: 4px solid var(--purple);
+  font-size: 14px;
+  line-height: 1.65;
+  color: var(--text);
+  animation: pop 0.3s cubic-bezier(.34,1.56,.64,1);
+}
+
+@keyframes pop {
+  from { opacity: 0; transform: scale(0.96) translateY(6px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.fb-label {
+  font-family: 'Nunito', sans-serif;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--purple);
+  margin-bottom: 6px;
+}
+
+/* nav buttons */
+.q-nav {
+  display: flex;
+  gap: 12px;
+  margin-top: 28px;
+}
+
+.btn-nav {
+  padding: 12px 32px;
+  border-radius: 50px;
+  font-family: 'Nunito', sans-serif;
+  font-size: 14px;
+  font-weight: 800;
+  cursor: pointer;
+  border: none;
+  transition: all 0.22s;
+}
+
+.btn-prev {
+  background: transparent;
+  border: 2px solid var(--lavender2);
+  color: var(--text-lt);
+}
+.btn-prev:hover { border-color: var(--purple); color: var(--purple); background: var(--lavender); }
+
+.btn-next {
+  background: linear-gradient(135deg, var(--purple), var(--purple-dk));
+  color: white;
+  margin-left: auto;
+  box-shadow: 0 4px 16px rgba(123,99,170,0.3);
+}
+.btn-next:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(123,99,170,0.4);
+}
+.btn-nav:disabled { opacity: 0.35; cursor: not-allowed; transform: none !important; box-shadow: none !important; }
+
+/* ═══════════ CONFETTI ═══════════ */
+.confetti-piece {
+  position: fixed;
+  width: 10px; height: 10px;
+  border-radius: 2px;
+  pointer-events: none;
+  z-index: 999;
+  animation: confettiFall 1s ease-out forwards;
+}
+
+@keyframes confettiFall {
+  0%   { transform: translateY(-20px) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(200px) rotate(540deg); opacity: 0; }
+}
+
+/* ═══════════ RESULT ═══════════ */
+#result-section {
+  display: none;
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  flex-direction: column;
+}
+
+.res-card {
+  background: var(--white);
+  border-radius: var(--radius-xl);
+  padding: 52px 44px;
+  max-width: 520px;
+  width: 100%;
+  box-shadow: var(--shadow);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.res-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 6px;
+  background: linear-gradient(90deg, var(--purple), var(--sage), var(--blush), var(--peach));
+}
+
+.res-emoji { font-size: 72px; display: block; margin-bottom: 16px; }
+
+.res-ring {
+  width: 150px; height: 150px;
+  border-radius: 50%;
+  margin: 0 auto 28px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.res-ring-svg {
+  position: absolute;
+  inset: 0;
+  transform: rotate(-90deg);
+}
+
+.res-ring-bg { fill: none; stroke: var(--lavender2); stroke-width: 10; }
+.res-ring-fill { fill: none; stroke-width: 10; stroke-linecap: round; transition: stroke-dashoffset 1s ease; }
+
+.res-ring-inner {
+  font-family: 'Nunito', sans-serif;
+  font-size: 36px;
+  font-weight: 900;
+  color: var(--purple);
+  position: relative;
+  z-index: 1;
+  line-height: 1;
+}
+
+.res-ring-sub {
+  font-size: 12px;
+  color: var(--text-lt);
+  font-weight: 600;
+  margin-top: 2px;
+}
+
+.res-title {
+  font-family: 'Nunito', sans-serif;
+  font-size: 28px;
+  font-weight: 900;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.res-msg {
+  font-size: 15px;
+  color: var(--text-lt);
+  line-height: 1.6;
+  margin-bottom: 32px;
+  font-weight: 300;
+}
+
+.res-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 36px;
+}
+
+.res-stat {
+  background: var(--lavender);
+  border-radius: 16px;
+  padding: 18px 8px;
+}
+
+.res-stat .n {
+  font-family: 'Nunito', sans-serif;
+  font-size: 40px;
+  font-weight: 900;
+  line-height: 1;
+}
+.res-stat.g .n { color: var(--ok); }
+.res-stat.r .n { color: var(--err); }
+.res-stat.a .n { color: var(--purple); }
+
+.res-stat .l {
+  font-size: 11px;
+  color: var(--text-lt);
+  font-weight: 700;
+  font-family: 'Nunito', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-top: 3px;
+}
+
+.res-grade {
+  font-family: 'Nunito', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--purple-dk);
+  margin-bottom: 28px;
+  background: var(--lavender);
+  display: inline-block;
+  padding: 8px 24px;
+  border-radius: 30px;
+}
+
+.btn-again {
+  background: linear-gradient(135deg, var(--purple), var(--purple-dk));
+  color: white;
+  border: none;
+  padding: 14px 48px;
+  border-radius: 50px;
+  font-family: 'Nunito', sans-serif;
+  font-size: 15px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.25s;
+  box-shadow: 0 6px 20px rgba(123,99,170,0.35);
+}
+
+.btn-again:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 28px rgba(123,99,170,0.45);
+}
+
+/* responsive */
+@media (max-width: 540px) {
+  .hero-card { padding: 40px 24px; }
+  .q-card { padding: 28px 20px; }
+  .topbar { padding: 12px 14px; gap: 10px; }
+  .topbar-logo { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- ░░ HERO ░░ -->
+<section id="hero">
+  <div class="hero-card">
+    <span class="hero-emoji">🎨</span>
+    <h1>Latihan Soal<br><span>Seni Budaya</span></h1>
+    <p>Soal-soal tentang apresiasi musik, seni rupa, tari, dan teater. Soal diacak setiap kali kamu mulai!</p>
+
+    <div class="hero-chips">
+      <div class="chip">🎵 Musik</div>
+      <div class="chip sage">🖌️ Seni Rupa</div>
+      <div class="chip blush">💃 Tari & Teater</div>
+    </div>
+
+    <div class="hero-chips">
+      <div class="chip">49 Soal</div>
+      <div class="chip sage">🔀 Acak Otomatis</div>
+      <div class="chip blush">✨ Feedback Langsung</div>
+    </div>
+
+    <button class="btn-hero" onclick="startQuiz()">Mulai Latihan ✨</button>
+  </div>
+</section>
+
+<!-- ░░ QUIZ ░░ -->
+<section id="quiz-section">
+  <div class="topbar">
+    <div class="topbar-logo">🎨 Seni Budaya</div>
+    <div class="prog-wrap">
+      <div class="prog-meta" id="prog-lbl">Soal 1 dari 49</div>
+      <div class="prog-track"><div class="prog-bar" id="prog-bar" style="width:2%"></div></div>
+    </div>
+    <div class="score-pill" id="score-pill">✦ 0</div>
+  </div>
+
+  <div class="dots" id="dots"></div>
+
+  <div class="q-outer">
+    <div class="q-card">
+      <div class="q-num" id="q-num">Soal 1</div>
+      <div class="q-text" id="q-text"></div>
+      <div class="options" id="options"></div>
+      <div class="feedback" id="feedback">
+        <div class="fb-label">Penjelasan</div>
+        <div id="fb-body"></div>
+      </div>
+      <div class="q-nav">
+        <button class="btn-nav btn-prev" id="btn-prev" onclick="move(-1)">← Sebelumnya</button>
+        <button class="btn-nav btn-next" id="btn-next" onclick="move(1)">Selanjutnya →</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ░░ RESULT ░░ -->
+<section id="result-section">
+  <div class="res-card">
+    <span class="res-emoji" id="res-emoji">🏆</span>
+
+    <div class="res-ring">
+      <svg class="res-ring-svg" viewBox="0 0 150 150">
+        <circle class="res-ring-bg" cx="75" cy="75" r="65"/>
+        <circle class="res-ring-fill" id="ring-fill" cx="75" cy="75" r="65"
+          stroke="url(#grad)" stroke-dasharray="408.41" stroke-dashoffset="408.41"/>
+        <defs>
+          <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#9B84CC"/>
+            <stop offset="100%" stop-color="#A8C5B5"/>
+          </linearGradient>
+        </defs>
+      </svg>
+      <div>
+        <div class="res-ring-inner" id="res-pct">0%</div>
+        <div class="res-ring-sub">SKOR</div>
+      </div>
+    </div>
+
+    <div class="res-title" id="res-title">Hasil Latihanmu</div>
+    <div class="res-msg" id="res-msg"></div>
+
+    <div class="res-stats">
+      <div class="res-stat g"><div class="n" id="r-ok">0</div><div class="l">Benar</div></div>
+      <div class="res-stat r"><div class="n" id="r-no">0</div><div class="l">Salah</div></div>
+      <div class="res-stat a"><div class="n" id="r-sk">0</div><div class="l">Lewati</div></div>
+    </div>
+
+    <div class="res-grade" id="res-grade"></div>
+    <br>
+    <button class="btn-again" onclick="restart()">🔀 Acak & Coba Lagi</button>
+  </div>
+</section>
+
+<script>
+/* ─── DATA ─── */
+const ALL_Q = [
+  {t:"Seorang siswa membuat aransemen lagu daerah menggunakan alat musik modern tanpa menghilangkan ciri khas daerahnya. Sikap tersebut menunjukkan bahwa musik modern dapat digunakan untuk ....",o:["menghilangkan identitas budaya daerah","mengganti fungsi alat musik tradisional","melestarikan budaya melalui inovasi","menyaingi musik tradisional sepenuhnya","mengubah seluruh bentuk lagu daerah"],a:2},
+  {t:"Ciri lagu yang membangkitkan semangat: (1) Tempo lagu cepat, (2) Menggunakan dinamika lembut, (3) Lirik berisi semangat perjuangan, (4) Menggunakan tangga nada minor. Ditunjukkan oleh nomor ....",o:["1 dan 2","1 dan 3","2 dan 4","2 dan 3","3 dan 4"],a:1},
+  {t:"Dalam sebuah pertunjukan musik, penonton tetap tertib dan menikmati pertunjukan sampai selesai. Sikap penonton tersebut menunjukkan fungsi musik sebagai ....",o:["media hiburan dan apresiasi","sarana perdagangan","alat komunikasi politik","media promosi semata","alat persaingan budaya"],a:0},
+  {t:"Seorang komposer menggabungkan unsur jazz dan gamelan Sunda dalam satu karya musik. Dampak positif dari kegiatan tersebut adalah ....",o:["mengurangi minat terhadap musik tradisional","menghilangkan nilai budaya lokal","menciptakan inovasi musik yang kreatif","menjadikan musik daerah sulit dipahami","mengganti seluruh alat musik tradisional"],a:2},
+  {t:"Sebuah kelompok band sekolah tampil tanpa latihan yang cukup sehingga permainan musik terdengar tidak harmonis. Faktor utama yang perlu diperbaiki adalah ....",o:["jumlah penonton","harga alat musik","kerja sama dan latihan","jenis pakaian pemain","tempat pertunjukan"],a:2},
+  {t:"Musik tradisional tetap diminati masyarakat meskipun banyak musik modern berkembang. Hal tersebut membuktikan bahwa musik tradisional memiliki ....",o:["nilai budaya dan identitas daerah","harga alat musik yang mahal","aturan yang tidak berubah","jumlah pemain yang sedikit","irama yang selalu cepat"],a:0},
+  {t:"Seorang siswa diminta memilih musik pengiring untuk drama bertema perjuangan. Musik yang paling tepat digunakan adalah musik yang memiliki ....",o:["tempo lambat dan santai","ritme semangat dan dinamis","nada rendah monoton","irama sedih berkepanjangan","lirik humor dan lucu"],a:1},
+  {t:"Penyanyi yang mampu mengatur tinggi rendah nada dengan baik akan menghasilkan penampilan yang ....",o:["monoton","harmonis","kacau","datar","terburu-buru"],a:1},
+  {t:"Perkembangan teknologi membuat seseorang dapat mempelajari musik melalui internet. Dampak positif kondisi tersebut adalah ....",o:["mengurangi kreativitas siswa","membatasi akses belajar musik","mempermudah pembelajaran musik","menghilangkan peran guru sepenuhnya","menjadikan musik tradisional punah"],a:2},
+  {t:"Sikap apresiatif terhadap karya musik: (1) Mendengarkan lagu dengan saksama, (2) Memberikan komentar yang sopan, (3) Menghina penampilan musisi, (4) Menghargai karya orang lain. Ditunjukkan nomor ....",o:["1 dan 2","1 dan 4","2 dan 3","1, 2, dan 4","2, 3, dan 4"],a:3},
+  {t:"Seorang pelukis menggunakan limbah plastik untuk membuat karya seni instalasi. Tindakan tersebut menunjukkan bahwa seni rupa dapat berfungsi sebagai ....",o:["media kritik sosial dan kreativitas","alat perusak lingkungan","media hiburan semata","sarana perdagangan ilegal","bentuk penolakan teknologi"],a:0},
+  {t:"Unsur seni rupa: (1) Titik, (2) Garis, (3) Nada, (4) Warna. Ditunjukkan nomor ....",o:["1, 2, dan 3","1, 2, dan 4","1, 3, dan 4","1 dan 2","2 dan 3"],a:1},
+  {t:"Sebuah poster dibuat dengan warna mencolok dan tulisan yang jelas agar mudah dibaca masyarakat. Hal tersebut menunjukkan bahwa poster memiliki fungsi ....",o:["dekoratif saja","estetis tanpa informasi","menyampaikan pesan secara visual","media hiburan pribadi","pengganti karya lukis"],a:2},
+  {t:"Dalam membuat karya seni rupa, komposisi yang seimbang akan memberikan kesan ....",o:["kacau","nyaman dipandang","membosankan","tidak teratur","monoton"],a:1},
+  {t:"Seorang siswa membuat desain batik dengan motif modern tetapi tetap menggunakan motif khas daerahnya. Sikap tersebut menunjukkan bahwa pelestarian budaya dapat dilakukan melalui ....",o:["meniru budaya asing sepenuhnya","menghilangkan motif tradisional","inovasi tanpa meninggalkan identitas budaya","mengganti seluruh warna batik tradisional","menolak perkembangan zaman"],a:2},
+  {t:"Pameran seni rupa di sekolah dapat meningkatkan kreativitas siswa karena ....",o:["siswa dapat memamerkan dan menghargai karya","siswa bebas menyalin karya orang lain","karya hanya dinilai berdasarkan harga","semua karya harus sama bentuknya","tidak memerlukan kerja sama"],a:0},
+  {t:"Karya seni rupa tiga dimensi memiliki ciri utama yaitu ....",o:["hanya memiliki panjang dan lebar","dapat dinikmati dari satu arah","memiliki volume dan ruang","dibuat dengan pensil saja","hanya berbentuk gambar"],a:2},
+  {t:"Seseorang mengkritik karya seni dengan bahasa yang sopan dan memberikan solusi perbaikan. Sikap tersebut menunjukkan kritik seni yang ....",o:["destruktif","subjektif berlebihan","membangun","menghina","tidak objektif"],a:2},
+  {t:"Pemanfaatan teknologi digital dalam seni rupa memungkinkan seniman untuk ....",o:["membatasi kreativitas","menciptakan karya lebih variatif","menghilangkan seni lukis manual","mengurangi minat masyarakat","menolak perkembangan media"],a:1},
+  {t:"Langkah apresiasi seni rupa yang benar: (1) Mengamati karya seni, (2) Memahami makna karya, (3) Menghargai proses pembuatan, (4) Menertawakan hasil karya. Ditunjukkan nomor ....",o:["1 dan 2","1, 2, dan 3","2 dan 4","1 dan 4","3 dan 4"],a:1},
+  {t:"Seorang seniman ingin menyampaikan kritik sosial melalui karyanya. Teknik yang paling tepat untuk menonjolkan pesan tersebut dalam karya seni rupa adalah ....",o:["Perspektif","Proporsi","Simbolisme","Simetri","Gradasi"],a:2},
+  {t:"Sebuah karya tari menggambarkan perjuangan rakyat melawan penjajah. Unsur yang paling penting untuk memperkuat makna tersebut dalam pertunjukan adalah ....",o:["Tata cahaya","Gerak tari ekspresif","Properti yang mewah","Musik tradisional","Jumlah penari"],a:1},
+  {t:"Jika sebuah penyajian kuda lumping menampilkan karya musik pop dengan aransemen musik gamelan, tantangan utama yang harus diperhatikan adalah ....",o:["Warna kostum pemain","Keaslian partitur","Kesesuaian nada dalam penyajian","Durasi konser","Penempatan alat musik"],a:2},
+  {t:"Seorang pelukis menggabungkan unsur abstrak dan seni tradisional dalam satu kanvas. Bentuk berpikir yang digunakan adalah ....",o:["Menilai","Menganalisis","Mencipta","Mengingat","Menghafal"],a:2},
+  {t:"Dalam seni pertunjukan teater, improvisasi dibutuhkan ketika ....",o:["Naskah terlalu rumit","Sutradara tidak hadir","Pemain lupa dialog","Musik tidak sesuai","Kostum tidak lengkap"],a:2},
+  {t:"Sebuah lukisan menggambarkan ketimpangan sosial melalui penggambaran kontras warna. Makna penggunaan warna tersebut adalah ....",o:["Meningkatkan estetika","Mengikuti tren","Menekankan pesan sosial","Menciptakan ilusi ruang","Menyusun komposisi"],a:2},
+  {t:"Penari dituntut untuk menjiwai karakter dengan gaya tari tertentu. Kemampuan ini disebut ....",o:["Improvisasi","Kreativitas","Ekspresi","Ketahanan fisik","Teknik"],a:2},
+  {t:"Mengapa seorang komposer memasukkan elemen gamelan ke dalam musik modern?",o:["Karena gamelan mudah dimainkan","Untuk menciptakan suara keras","Menunjukkan identitas budaya","Menghindari royalti","Agar terdengar asing"],a:2},
+  {t:"Dalam pementasan drama, latar belakang (setting) dipilih sesuai tema cerita. Dampak utama pilihan tersebut terhadap penonton adalah ....",o:["Menarik perhatian","Menambah durasi","Mempermudah hafalan","Menguatkan imajinasi","Mengurangi biaya"],a:3},
+  {t:"Komposer menggabungkan tangga nada pentatonik dengan notasi Barat. Hal ini menunjukkan ....",o:["Adaptasi budaya","Kesulitan memahami teori","Pelanggaran aturan musik","Ketidaksengajaan","Penyesuaian ekonomi"],a:0},
+  {t:"Dalam sebuah pertunjukan musik orkestra, konduktor memiliki peran penting. Pengaruh gaya kepemimpinan konduktor terhadap interpretasi musik adalah ....",o:["Tidak ada pengaruh","Menentukan dinamika dan tempo yang seragam antar pemain","Mengatur posisi duduk pemain","Memberikan aba-aba istirahat","Mengganti komposisi lagu saat pertunjukan"],a:1},
+  {t:"Seorang komposer ingin menciptakan suasana tegang dalam komposisinya. Teknik musikal yang paling efektif digunakan adalah ....",o:["Menggunakan tempo lambat dan melodi lembut","Mengulang motif melodi secara konstan","Meningkatkan disonansi dan dinamika tiba-tiba","Menggunakan nada mayor yang stabil","Menambahkan lirik humor"],a:2},
+  {t:"Cara seorang musisi tradisional menjaga keaslian karya musik daerah dalam konteks globalisasi adalah ....",o:["Menggabungkan instrumen digital agar kekinian","Mengubah lirik agar mudah dipahami anak muda","Melakukan kolaborasi dengan genre luar tanpa kehilangan identitas musik","Menghilangkan unsur lokal agar lebih universal","Meniru musik populer internasional sepenuhnya"],a:2},
+  {t:"Dampak penggunaan teknologi digital terhadap proses penciptaan musik kontemporer adalah ....",o:["Menurunkan kualitas musikal","Membatasi kreativitas","Mempermudah eksperimen suara dan distribusi karya","Menghilangkan peran musisi","Menyebabkan karya musik menjadi terlalu panjang"],a:2},
+  {t:"Jika kamu seorang guru musik yang ingin meningkatkan kreativitas siswa, strategi yang paling tepat adalah ....",o:["Memberikan tugas menghafal lagu nasional","Menyuruh siswa menonton konser secara pasif","Mengajak siswa menciptakan lagu berdasarkan tema yang mereka pilih sendiri","Melarang penggunaan instrumen selain alat musik tradisional","Memberikan soal pilihan ganda setiap minggu"],a:2},
+  {t:"Sebuah grup band menggabungkan unsur musik jazz, rock, dan etnik Indonesia. Pendekatan musikal yang digunakan adalah ....",o:["Interpretasi","Improvisasi","Kolaborasi","Akulturasi atau perpaduan budaya","Eksplorasi"],a:3},
+  {t:"Mengapa pemahaman lirik lagu penting dalam pertunjukan?",o:["Untuk menunjukkan kehebatan teknis pemain","Agar penonton bisa ikut bernyanyi","Untuk memahami maksud dan pesan lirik","Supaya bisa mengganti bagian lagu sesuai selera","Agar bisa memainkan lagu tanpa membaca notasi"],a:2},
+  {t:"Dalam proyek pertunjukan musik sekolah, siswa diminta menyusun aransemen ulang lagu daerah. Keterampilan utama yang dikembangkan adalah ....",o:["Membaca notasi","Bernyanyi dengan indah","Menghafal lirik","Berpikir kreatif dan kolaboratif","Meniru aransemen dari internet"],a:3},
+  {t:"Tantangan utama dalam menjaga kelestarian musik tradisional di era digital adalah ....",o:["Kurangnya alat musik digital","Minimnya panggung pertunjukan fisik","Dominasi budaya populer dan minimnya dokumentasi yang menarik","Kualitas suara alat musik tradisional yang rendah","Tidak adanya peminat dari generasi tua"],a:2},
+  {t:"Seorang siswa memadukan suara alat musik tradisional dengan efek suara dari aplikasi digital untuk membuat karya orisinal. Bentuk kegiatan tersebut adalah ....",o:["Imitasi","Restorasi","Improvisasi","Inovasi","Kolonisasi"],a:3},
+  {t:"Salah satu karya seni rupa modern menggunakan benda-benda sehari-hari untuk menyampaikan pesan sosial. Teknik ini disebut dengan ....",o:["Mozaik","Instalasi","Kaligrafi","Kolase","Fresko"],a:1},
+  {t:"Seorang seniman membuat lukisan dengan gaya surealis yang menampilkan manusia berkepala jam. Makna simbolik dari karya tersebut jika dikaitkan dengan kehidupan modern adalah ....",o:["Waktu adalah uang","Waktu tak pernah berhenti","Manusia dikendalikan oleh waktu","Waktu bisa diatur manusia","Jam adalah bagian dari seni"],a:2},
+  {t:"Seni rupa dua dimensi memiliki keterbatasan dalam menampilkan unsur ruang. Cara seniman mengatasi hal tersebut adalah ....",o:["Menggunakan warna gelap","Menerapkan teknik perspektif","Menambahkan suara","Menggunakan media campuran","Mewarnai dengan warna-warna primer"],a:1},
+  {t:"Alasan seorang seniman kontemporer lebih memilih menggunakan sampah plastik dalam karya seninya adalah ....",o:["Plastik mudah dibentuk","Plastik mengkilap dan menarik","Untuk menekan biaya produksi","Sebagai kritik terhadap polusi lingkungan","Karena kekurangan bahan konvensional"],a:3},
+  {t:"Sebuah patung terbuat dari material kaca pecah dan disusun menjadi sosok manusia. Unsur dominan yang ditonjolkan dalam karya ini adalah ....",o:["Tekstur dan warna","Keseimbangan dan gerak","Volume dan irama","Tekstur dan simbolik","Bentuk dan proporsi"],a:3},
+  {t:"Seorang siswa membuat karya seni rupa berupa lukisan digital. Pendekatan apresiasi yang paling tepat terhadap karya tersebut adalah ....",o:["Menilai dari kemiripan objek aslinya","Menganalisis teknik digital dan konsep yang diangkat","Menentukan seberapa rumit alat yang digunakan","Membandingkan dengan lukisan manual","Menghitung jumlah warna yang digunakan"],a:1},
+  {t:"Mengapa prinsip kesatuan penting dalam menciptakan komposisi seni rupa?",o:["Agar karya terlihat mahal","Untuk menunjukkan keahlian teknis","Supaya unsur-unsur terlihat saling mendukung membentuk harmoni","Supaya karya bisa dipamerkan","Agar warna terlihat lebih cerah"],a:2},
+  {t:"Seni rupa tradisional sering kali mengandung unsur simbolik. Pentingnya memahami simbol dalam karya seni tradisional adalah ....",o:["Agar bisa meniru bentuknya","Supaya bisa dinilai secara ekonomi","Untuk memahami nilai dan makna budaya yang terkandung","Agar bisa dikomersialisasikan","Supaya lebih mudah dipajang"],a:2},
+  {t:"Tantangan utama seniman dalam membuat karya seni kontemporer yang berbasis isu sosial adalah ....",o:["Menggunakan bahan mahal","Mencari tempat pameran","Menyampaikan pesan yang kompleks dengan cara visual yang efektif","Mencapai ketenaran","Menjual karyanya dengan harga tinggi"],a:2},
+];
+
+const LETTERS = ['A','B','C','D','E'];
+const CONFETTI_COLORS = ['#C9B8E8','#A8C5B5','#F0C4C4','#F5D9C0','#BFD9EE','#FFD700'];
+
+let Q = [], cur = 0, ans = [], score = 0;
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function startQuiz() {
+  Q = shuffle(ALL_Q);
+  cur = 0; ans = new Array(Q.length).fill(null); score = 0;
+  document.getElementById('hero').style.display = 'none';
+  document.getElementById('quiz-section').style.display = 'block';
+  buildDots(); render();
+}
+
+function buildDots() {
+  const el = document.getElementById('dots');
+  el.innerHTML = '';
+  Q.forEach((_, i) => {
+    const d = document.createElement('div');
+    d.className = 'dot' + (i === 0 ? ' cur' : '');
+    d.textContent = i + 1;
+    d.onclick = () => { cur = i; render(); };
+    el.appendChild(d);
+  });
+}
+
+function updateDots() {
+  document.querySelectorAll('.dot').forEach((d, i) => {
+    d.className = 'dot';
+    if (ans[i] !== null) d.classList.add(ans[i] === Q[i].a ? 'ok' : 'no');
+    if (i === cur) d.classList.add('cur');
+  });
+}
+
+function render() {
+  const q = Q[cur];
+  const total = Q.length;
+  document.getElementById('q-num').textContent = `Soal ${cur + 1}`;
+  document.getElementById('q-text').textContent = q.t;
+  document.getElementById('prog-lbl').textContent = `Soal ${cur + 1} dari ${total}`;
+  document.getElementById('prog-bar').style.width = ((cur + 1) / total * 100) + '%';
+  document.getElementById('score-pill').textContent = `✦ ${score}`;
+
+  const el = document.getElementById('options');
+  el.innerHTML = '';
+  q.o.forEach((txt, i) => {
+    const div = document.createElement('div');
+    div.className = 'opt' + (ans[cur] !== null ? ' locked' : '');
+    if (ans[cur] !== null) {
+      if (i === q.a) div.classList.add('correct');
+      else if (i === ans[cur]) div.classList.add('wrong');
+    }
+    div.innerHTML = `<div class="opt-ltr">${LETTERS[i]}</div><div class="opt-txt">${txt}</div>`;
+    if (ans[cur] === null) div.onclick = () => pick(i);
+    el.appendChild(div);
+  });
+
+  const fb = document.getElementById('feedback');
+  const fbBody = document.getElementById('fb-body');
+  if (ans[cur] !== null) {
+    const ok = ans[cur] === q.a;
+    fbBody.innerHTML = ok
+      ? `✅ <b>Benar!</b> Jawaban yang tepat adalah <b>${LETTERS[q.a]}. ${q.o[q.a]}</b>.`
+      : `❌ <b>Salah.</b> Jawaban yang benar adalah <b>${LETTERS[q.a]}. ${q.o[q.a]}</b>.`;
+    fb.style.display = 'block';
+  } else {
+    fb.style.display = 'none';
+  }
+
+  document.getElementById('btn-prev').disabled = cur === 0;
+  document.getElementById('btn-next').textContent = cur === Q.length - 1 ? 'Lihat Hasil 🎉' : 'Selanjutnya →';
+  updateDots();
+}
+
+function pick(i) {
+  if (ans[cur] !== null) return;
+  ans[cur] = i;
+  if (i === Q[cur].a) { score++; confetti(); }
+  render();
+}
+
+function confetti() {
+  const count = 18;
+  for (let n = 0; n < count; n++) {
+    setTimeout(() => {
+      const p = document.createElement('div');
+      p.className = 'confetti-piece';
+      p.style.cssText = `
+        left: ${Math.random() * 100}vw;
+        top: ${Math.random() * 40 + 20}vh;
+        background: ${CONFETTI_COLORS[Math.floor(Math.random() * CONFETTI_COLORS.length)]};
+        width: ${Math.random() * 8 + 6}px;
+        height: ${Math.random() * 8 + 6}px;
+        border-radius: ${Math.random() > 0.5 ? '50%' : '2px'};
+        animation-duration: ${Math.random() * 0.6 + 0.8}s;
+        animation-delay: ${Math.random() * 0.2}s;
+      `;
+      document.body.appendChild(p);
+      setTimeout(() => p.remove(), 1200);
+    }, n * 40);
+  }
+}
+
+function move(dir) {
+  if (dir === 1 && cur === Q.length - 1) { showResult(); return; }
+  cur = Math.max(0, Math.min(Q.length - 1, cur + dir));
+  render();
+}
+
+function showResult() {
+  document.getElementById('quiz-section').style.display = 'none';
+  const rs = document.getElementById('result-section');
+  rs.style.display = 'flex';
+
+  const correct = ans.filter((a, i) => a === Q[i].a).length;
+  const wrong   = ans.filter((a, i) => a !== null && a !== Q[i].a).length;
+  const skip    = ans.filter(a => a === null).length;
+  const pct     = Math.round(correct / Q.length * 100);
+
+  document.getElementById('res-pct').textContent = pct + '%';
+  document.getElementById('r-ok').textContent = correct;
+  document.getElementById('r-no').textContent = wrong;
+  document.getElementById('r-sk').textContent = skip;
+
+  // animate ring
+  const circ = 2 * Math.PI * 65;
+  setTimeout(() => {
+    document.getElementById('ring-fill').style.strokeDashoffset = circ * (1 - pct / 100);
+  }, 200);
+
+  let emoji, title, msg, grade;
+  if      (pct >= 90) { emoji='🏆'; title='Luar Biasa!';   msg='Kamu sangat menguasai materi Seni Budaya ini!';          grade='Predikat A — Sangat Baik 🌟'; }
+  else if (pct >= 75) { emoji='🌟'; title='Bagus Sekali!'; msg='Hampir sempurna! Tinjau beberapa soal yang terlewat.';   grade='Predikat B — Baik ✨'; }
+  else if (pct >= 60) { emoji='🎨'; title='Cukup Baik';    msg='Sudah cukup, tapi masih ada yang perlu diperdalam.';     grade='Predikat C — Cukup 📚'; }
+  else                { emoji='💪'; title='Terus Semangat!'; msg='Pelajari ulang materinya, kamu pasti bisa lebih baik!'; grade='Predikat D — Perlu Ditingkatkan'; }
+
+  document.getElementById('res-emoji').textContent = emoji;
+  document.getElementById('res-title').textContent = title;
+  document.getElementById('res-msg').textContent = msg;
+  document.getElementById('res-grade').textContent = grade;
+}
+
+function restart() {
+  cur = 0; ans = []; score = 0;
+  Q = shuffle(ALL_Q);
+  document.getElementById('result-section').style.display = 'none';
+  document.getElementById('quiz-section').style.display = 'block';
+  document.getElementById('ring-fill').style.strokeDashoffset = '408.41';
+  buildDots(); render();
+}
+</script>
+</body>
+</html>
